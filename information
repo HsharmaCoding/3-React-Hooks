@@ -1,0 +1,137 @@
+> Some Rules
+        1. Only call hooks at the top level of the functions.
+            > Don't call hooks inside loops, condition, or nested functions.
+
+        2. Only call hooks from React functions.
+            > Call them from within React functional components and not just any regular JavaScript function.
+
+> useState()
+    > The React useState Hook allows us to track state in a function component.
+
+        1. Simple counter example of useState()
+            > src/components/UseStateCounterOneDemo.tsx
+
+        2. Set the counter values from the previous values.
+            > src/components/UseStateCounterTwoDemo.tsx
+
+> useEffect()
+    > The useEffect Hook allows you to perform side effects in your components.
+    > Some examples of side effects are: fetching data, directly updating the DOM, and timers.
+    > useEffect accepts two arguments. The second argument is optional. useEffect(<function>, <dependency>)
+    > 
+        1. No dependency passed:
+            useEffect(() => {
+            //Runs on every render
+            });
+
+        2. An empty array:
+            useEffect(() => {
+            //Runs only on the first render
+            }, []);
+
+        3. Props or state values:
+            useEffect(() => {
+            //Runs on the first render
+            //And any time any dependency value changes
+            }, [prop, state]);
+
+        4. Demo of useEffect()
+            > /src/components/UseEffectDemo/tsx
+
+> useContext()
+    > React Context is a way to manage state globally.
+    > It can be used together with the useState Hook to share state between deeply nested components more easily than with useState alone.
+    > The Problem
+            > State should be held by the highest parent component in the stack that requires access to the state.
+            > To illustrate, we have many nested components. The component at the top and bottom of the stack need access to the state.
+            > To do this without Context, we will need to pass the state as "props" through each nested component. This is called "prop drilling".
+    > The Solution
+            > The solution is to create context.
+            > To create context, you must Import createContext and initialize it.
+            > Next we'll use the Context Provider to wrap the nested components that need the state Context.
+            > Wrap child components in the Context Provider and supply the state value.
+            > Now, all components in this tree will have access to the user Context.
+            > n order to use the Context in a child component, we need to access it using the useContext Hook.
+            > First, include the useContext in the import statement.
+            > Then you can access the user Context in all components.
+    > Please check the following files for the working demo.
+            > Parent Component: Here we are creating state and supplying to the child components.
+                    > component/UseContext/UseContextDemo.tsx
+            > Child Component: Consuming state from the parent component.
+                    > component/UseContext/Component1.tsx
+                    > component/UseContext/Component2.tsx
+                    > component/UseContext/Component3.tsx
+                    > component/UseContext/Component4.tsx
+                    > component/UseContext/Component5.tsx
+
+> useCallback()
+    > The React useCallback Hook returns a memoized callback function.
+    > Think of memoization as caching a value so that it does not need to be recalculated.
+    > This allows us to isolate resource intensive functions so that they will not automatically run on every render.
+    > The useCallback Hook only runs when one of its dependencies update.
+    > This can improve performance.
+            > Problem without useCallback()
+                > One reason to use useCallback is to prevent a component from re-rendering unless its props have changed.
+                > In this example, you might think that the Todos component will not re-render unless the todos change:
+                    > components/ProblemWihoutUseCallBack/ApplicationWithoutUseCallBack.tsx
+                    > components/ProblemWihoutUseCallBack/Todos.tsx
+                    > Try running this and click the count increment button.
+                    > You will notice that the Todos component re-renders even when the todos do not change.
+                    > Why does this not work? We are using memo, so the Todos component should not re-render since neither the todos state nor the addTodo function are changing when the count is incremented.
+                    > This is because of something called "referential equality".
+                    > Every time a component re-renders, its functions get recreated. Because of this, the addTodo function has actually changed.
+
+            > Solution with useCallback()
+                > To fix this, we can use the useCallback hook to prevent the function from being recreated unless necessary.
+                > Use the useCallback Hook to prevent the Todos component from re-rendering needlessly:
+                > Now the Todos component will only re-render when the todos prop changes.
+                > components/SolutionWithUseCallBack/ApplicationWithUseCallBack.tsx
+                > components/SolutionWithUseCallBack/Todos.tsx
+
+> useMemo()
+    > The React useMemo Hook returns a memoized value.
+    > Think of memoization as caching a value so that it does not need to be recalculated.
+    > The useMemo Hook only runs when one of its dependencies update.
+    > This can improve performance.
+    > The useMemo and useCallback Hooks are similar. The main difference is that useMemo returns a memoized value and useCallback returns a memoized function
+    > Prioblem:
+        > Component/UseMemo/ProblemWithoutUseMemo/ApplicationWithoutUseMemo
+        > The useMemo Hook can be used to keep expensive, resource intensive functions from needlessly running.
+        > In this example, we have an expensive function that runs on every render.
+        > When changing the count or adding a todo, you will notice a delay in execution.
+        > A poor performing function. The expensiveCalculation function runs on every render:
+    > Solution:
+        > Component/UseMemo/SolutionWithUseMemo/ApplicationWithUseCallBack
+        > To fix this performance issue, we can use the useMemo Hook to memoize the expensiveCalculation function. This will cause the function to only run when needed.
+        > We can wrap the expensive function call with useMemo.
+        > The useMemoHook accepts a second parameter to declare dependencies. The expensive function will only run when its dependencies have changed.
+        > In the above example, the expensive function will only run when count is changed and not when todo's are added.
+
+> Custom Hook
+    > Hooks are reusable functions.
+    > When you have component logic that needs to be used by multiple components, we can extract that logic to a custom Hook.
+    > Component/CustomHook/CustomHookDemo
+        > This file acts as a function.
+    > Component/CustomHook/ApplicationCustomHook
+        > This file is calling the custom hook Component/CustomHook/CustomHookDemo to fetch the remote data.
+
+> React Memo
+    > Using memo will cause React to skip rendering a component if its props have not changed.
+    > This can improve performance.
+    > Problem
+        > components/ReactMemo/ProblemWithoutReactMemo/ApplicationWithoutReactMemo
+        > In this example, the Todos component re-renders even when the todos have not changed.
+        > When you click the increment button, the Todos component re-renders.
+        > If this component was complex, it could cause performance issues.
+    > Solution
+        > components/ReactMemo/SolutionWithReactMemo/ApplicationWithReactMemo
+        > To fix this, we can use memo.
+        > Use memoto keep the Todos component from needlessly re-rendering.
+        > Wrap the Todos component export in memo.
+
+> All the components are calling from the App.tsx file.
+
+
+
+
+
